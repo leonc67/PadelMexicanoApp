@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm show:*)",
+      "Bash(npm audit:*)",
+      "Bash(/Users/leoncincovic/Desktop/PadelMexicano/.gitignore:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "Bash(npm run:*)"
+    ]
+  }
+}
