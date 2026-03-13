@@ -12,6 +12,35 @@ interface EditPairingModalProps {
   onClose: () => void;
 }
 
+function PlayerSelect({
+  value,
+  onChange,
+  label,
+  options,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  label: string;
+  options: Player[];
+}) {
+  return (
+    <div>
+      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        {options.map((p) => (
+          <option key={p.id} value={p.id}>
+            {p.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 export function EditPairingModal({
   match,
   allMatchesInRound,
@@ -19,7 +48,6 @@ export function EditPairingModal({
   tournamentId,
   onClose,
 }: EditPairingModalProps) {
-  // Only the 4 players already on this court
   const courtPlayerIds = new Set([...match.team_a, ...match.team_b]);
   const roundPlayers = players.filter((p) => courtPlayerIds.has(p.id));
 
@@ -50,33 +78,6 @@ export function EditPairingModal({
     }
   }
 
-  function PlayerSelect({
-    value,
-    onChange,
-    label,
-  }: {
-    value: string;
-    onChange: (v: string) => void;
-    label: string;
-  }) {
-    return (
-      <div>
-        <label className="block text-xs text-gray-500 mb-1">{label}</label>
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          {roundPlayers.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  }
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
@@ -88,16 +89,16 @@ export function EditPairingModal({
           <div>
             <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Team A</p>
             <div className="space-y-2">
-              <PlayerSelect value={a1} onChange={setA1} label="Player 1" />
-              <PlayerSelect value={a2} onChange={setA2} label="Player 2" />
+              <PlayerSelect value={a1} onChange={setA1} label="Player 1" options={roundPlayers} />
+              <PlayerSelect value={a2} onChange={setA2} label="Player 2" options={roundPlayers} />
             </div>
           </div>
 
           <div className="border-t border-gray-100 pt-4">
             <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Team B</p>
             <div className="space-y-2">
-              <PlayerSelect value={b1} onChange={setB1} label="Player 1" />
-              <PlayerSelect value={b2} onChange={setB2} label="Player 2" />
+              <PlayerSelect value={b1} onChange={setB1} label="Player 1" options={roundPlayers} />
+              <PlayerSelect value={b2} onChange={setB2} label="Player 2" options={roundPlayers} />
             </div>
           </div>
         </div>
