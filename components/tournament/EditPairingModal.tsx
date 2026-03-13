@@ -48,8 +48,7 @@ export function EditPairingModal({
   tournamentId,
   onClose,
 }: EditPairingModalProps) {
-  const courtPlayerIds = new Set([...match.team_a, ...match.team_b]);
-  const roundPlayers = players.filter((p) => courtPlayerIds.has(p.id));
+  const roundPlayers = [...players].sort((a, b) => a.name.localeCompare(b.name));
 
   const [a1, setA1] = useState(match.team_a[0]);
   const [a2, setA2] = useState(match.team_a[1]);
