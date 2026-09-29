@@ -38,12 +38,11 @@ export default function RoundsPage() {
     }
   }
 
-  const editingMatchRound = editingMatch
-    ? matches.filter((m) => {
-        const match = matches.find((mm) => mm.id === editingMatch.id);
-        return match && m.round_id === match.round_id;
-      })
-    : [];
+  // Alle kampene i samme runde som kampen som redigeres.
+  let editingMatchRound: Match[] = [];
+  if (editingMatch) {
+    editingMatchRound = matches.filter((m) => m.round_id === editingMatch.round_id);
+  }
 
   return (
     <div className="space-y-4">
