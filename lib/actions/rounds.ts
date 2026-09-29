@@ -135,9 +135,15 @@ export async function generateNextRound(tournamentId: string) {
   const supabase = createClient();
 
   // Steg 1: hent alt vi trenger.
-  const tournament = await loadTournament(supabase, tournamentId);
-  const players = await loadPlayers(supabase, tournamentId);
-  const rounds = await loadRounds(supabase, tournamentId);
+  // Turnering, spillere og runder hører ikke sammen, så vi henter dem samtidig.
+  // Det er raskere enn å vente på ett kall om gangen.
+  const [tournament, players, rounds] = await Promise.all([
+    loadTournament(supabase, tournamentId),
+    loadPlayers(supabase, tournamentId),
+    loadRounds(supabase, tournamentId),
+  ]);
+
+  // Kampene må hentes etterpå, fordi vi trenger å vite hvilke runder som finnes.
   const allMatches = await loadMatches(supabase, rounds);
 
   const isFirstRound = rounds.length === 0;
