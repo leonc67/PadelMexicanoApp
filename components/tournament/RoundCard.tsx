@@ -23,16 +23,20 @@ export function RoundCard({
   defaultOpen = false,
   isLatest = false,
 }: RoundCardProps) {
+  // Hvor mange av kampene har fått poeng?
   const scored = matches.filter((m) => m.score_a !== null && m.score_b !== null).length;
   const total = matches.length;
   const allScored = scored === total && total > 0;
 
+  // open: er runden utvidet (viser kampene) eller sammenslått?
   const [open, setOpen] = useState(defaultOpen);
 
+  // Gamle, ferdig spilte runder lukkes av seg selv, så den nyeste runden er lett å finne.
   useEffect(() => {
     if (!isLatest && allScored) setOpen(false);
   }, [isLatest, allScored]);
 
+  // Alle som ikke er med i noen kamp denne runden har pause.
   const activePlayerIds = new Set(matches.flatMap((m) => [...m.team_a, ...m.team_b]));
   const sittingOut = players.filter((p) => !activePlayerIds.has(p.id));
 

@@ -3,15 +3,18 @@
 import { useState } from "react";
 import { createTournament } from "@/lib/actions/tournament";
 
+// Faste valg for maks poeng per kamp. Man kan også velge Custom.
 const PRESET_POINTS = [16, 21, 24];
 
 export function TournamentSetupForm() {
+  // Hver useState er en variabel skjemaet husker mens man fyller det ut.
   const [numCourts, setNumCourts] = useState(2);
   const [maxPoints, setMaxPoints] = useState<number | "custom">(16);
   const [customPoints, setCustomPoints] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Kjører når man trykker 'Create Tournament': sjekker poenggrensen og sender alt til serveren.
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
@@ -32,6 +35,7 @@ export function TournamentSetupForm() {
     }
   }
 
+  // Felles utseende for alle tekstfeltene (Tailwind-klasser).
   const inputClass = "w-full rounded-lg bg-white/10 border border-white/20 px-4 py-2.5 text-sm text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-green-400";
 
   return (
