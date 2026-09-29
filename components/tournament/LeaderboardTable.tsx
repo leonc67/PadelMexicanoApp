@@ -6,8 +6,10 @@ import { computeLeaderboard } from "@/lib/algorithms/leaderboard";
 
 export function LeaderboardTable() {
   const { players, matches } = useTournament();
+  // useMemo husker resultatet, og tabellen regnes bare ut på nytt når spillere eller kamper endrer seg.
   const entries = useMemo(() => computeLeaderboard(players, matches), [players, matches]);
 
+  // Plassering per rad. Spillere som er helt like (samme differanse, poeng og seiere) deler plassering.
   const ranks: number[] = [];
   for (let i = 0; i < entries.length; i++) {
     if (i === 0) {

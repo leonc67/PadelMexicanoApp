@@ -11,11 +11,15 @@ import type { Match } from "@/lib/types";
 export default function RoundsPage() {
   const { tournament, players, rounds, matches } = useTournament();
   const router = useRouter();
+  // editingMatch: kampen som redigeres nå (null = ingen).
+  // generating og genError styrer knappen for ny runde.
   const [editingMatch, setEditingMatch] = useState<Match | null>(null);
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
 
   // Check if we can generate next round
+  // Man kan lage neste runde når det ikke finnes noen runder ennå,
+  // eller når alle kampene i siste runde har poeng.
   const lastRound = rounds.at(-1);
   const lastRoundMatches = lastRound
     ? matches.filter((m) => m.round_id === lastRound.id)
@@ -25,6 +29,7 @@ export default function RoundsPage() {
     (lastRoundMatches.length > 0 &&
       lastRoundMatches.every((m) => m.score_a !== null && m.score_b !== null));
 
+  // Ber serveren lage neste runde, og laster siden på nytt for å vise den.
   async function handleGenerateRound() {
     setGenError(null);
     setGenerating(true);

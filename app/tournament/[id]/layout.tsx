@@ -7,6 +7,8 @@ import { ManagePlayersButton } from "@/components/tournament/ManagePlayersButton
 import type { Tournament, Player, Round, Match } from "@/lib/types";
 import Link from "next/link";
 
+// Rammen rundt alle sidene i en turnering (Rounds og Leaderboard).
+// Den kjører på serveren, henter dataen fra databasen én gang og deler den med resten via TournamentProvider.
 export default async function TournamentLayout({
   children,
   params,
@@ -17,6 +19,7 @@ export default async function TournamentLayout({
   const supabase = createClient();
   const { id } = params;
 
+  // Hent turnering, spillere og runder samtidig (Promise.all venter til alle er ferdige).
   const [
     { data: tournament },
     { data: players },
@@ -27,8 +30,10 @@ export default async function TournamentLayout({
     supabase.from("rounds").select("*").eq("tournament_id", id).order("round_number"),
   ]);
 
+  // Finnes ikke turneringen, vis 404-siden.
   if (!tournament) notFound();
 
+  // Kampene henter vi etterpå, fordi vi først må vite hvilke runder som finnes.
   const roundIds = (rounds ?? []).map((r: Round) => r.id);
   let matches: Match[] = [];
   if (roundIds.length > 0) {
