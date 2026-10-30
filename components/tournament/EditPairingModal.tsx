@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { editMatchPairing } from "@/lib/actions/rounds";
 import type { Match, Player } from "@/lib/types";
+import { useTournament } from "./TournamentContext";
+import { getCourtName } from "@/lib/courts";
 
 interface EditPairingModalProps {
   match: Match;
@@ -50,6 +52,7 @@ export function EditPairingModal({
   tournamentId,
   onClose,
 }: EditPairingModalProps) {
+  const { tournament } = useTournament();
   // Alle spillere, sortert alfabetisk.
   const roundPlayers = [...players].sort((a, b) => a.name.localeCompare(b.name));
 
@@ -88,7 +91,7 @@ export function EditPairingModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md mx-4">
         <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          Edit Pairing — Court {match.court}
+          Edit Pairing — {getCourtName(tournament, match.court)}
         </h2>
 
         <div className="space-y-4">

@@ -3,6 +3,9 @@ export interface Tournament {
   name: string;
   num_courts: number;
   max_points: number;
+  // Egne navn på banene. court_names[0] er bane 1, court_names[1] er bane 2 osv.
+  // Tom tekst eller manglende navn betyr at banen bare heter "Court 1", "Court 2" osv.
+  court_names?: string[] | null;
   created_at: string;
 }
 

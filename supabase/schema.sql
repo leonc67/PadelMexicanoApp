@@ -10,11 +10,15 @@ create table if not exists tournaments (
   name        text not null,
   num_courts  int  not null check (num_courts >= 1),
   max_points  int  not null default 16 check (max_points >= 1),
+  court_names text[] not null default '{}',  -- court_names[1] er navnet på bane 1 osv.
   created_at  timestamptz default now()
 );
 
 -- For databases created before max_points existed
 alter table tournaments add column if not exists max_points int not null default 16;
+
+-- For databases created before court_names existed
+alter table tournaments add column if not exists court_names text[] not null default '{}';
 
 create table if not exists players (
   id             uuid primary key default gen_random_uuid(),
