@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { submitScore } from "@/lib/actions/scores";
 import { useTournament } from "./TournamentContext";
+import { getCourtName } from "@/lib/courts";
 import type { Match, Player } from "@/lib/types";
 
 interface MatchCardProps {
@@ -170,7 +171,7 @@ export function MatchCard({ match, players, tournamentId, onEditPairing }: Match
         {/* Banenummer */}
         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20">
           <span className="bg-gray-900 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
-            Court {match.court}
+            {getCourtName(tournament, match.court)}
           </span>
         </div>
 

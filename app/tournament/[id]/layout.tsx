@@ -4,6 +4,7 @@ import { TournamentProvider } from "@/components/tournament/TournamentContext";
 import { RealtimeProvider } from "@/components/tournament/RealtimeProvider";
 import { ResetButton } from "@/components/tournament/ResetButton";
 import { ManagePlayersButton } from "@/components/tournament/ManagePlayersButton";
+import { CourtsButton } from "@/components/tournament/CourtsButton";
 import type { Tournament, Player, Round, Match } from "@/lib/types";
 import Link from "next/link";
 
@@ -50,15 +51,15 @@ export default async function TournamentLayout({
     >
       <RealtimeProvider roundIds={roundIds} />
       <div className="min-h-screen bg-[#2c4a3e]">
-        <header className="bg-[#1e3530] border-b border-white/10 sticky top-0 z-10">
-          <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+        <header className="bg-[#1e3530] border-b border-white/10 sticky top-0 z-30">
+          <div className="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
             <div>
               <h1 className="font-black text-white text-lg">{tournament.name}</h1>
               <p className="text-xs text-white/50">
                 {(players ?? []).length} players · {tournament.num_courts} court{tournament.num_courts !== 1 ? "s" : ""}
               </p>
             </div>
-            <nav className="flex items-center gap-1">
+            <nav className="flex flex-wrap items-center gap-1">
               <Link href={`/tournament/${id}/rounds`} className="rounded-lg px-3 py-1.5 text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 transition-colors">
                 Rounds
               </Link>
@@ -66,6 +67,7 @@ export default async function TournamentLayout({
                 Leaderboard
               </Link>
               <ManagePlayersButton />
+              <CourtsButton />
               <ResetButton tournamentId={id} />
               <Link href="/" className="rounded-lg px-3 py-1.5 text-sm font-medium text-white/70 hover:text-white hover:bg-white/10 transition-colors">
                 🏠

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { generateNextRound } from "@/lib/actions/rounds";
 import type { Match, Round } from "@/lib/types";
+import { MAX_COURT_NAME_LENGTH } from "@/lib/courts";
 
 // "Supabase-klienten" er det vi bruker for å snakke med databasen.
 type Supabase = ReturnType<typeof createClient>;
@@ -235,5 +236,28 @@ export async function resetTournament(tournamentId: string) {
 
   // Start på nytt med en ny runde 1.
   await generateNextRound(tournamentId);
+  refreshPages(tournamentId);
+}
+
+// Lagrer navnene på banene. names[0] er bane 1, names[1] er bane 2 osv.
+// Et tomt navn betyr at banen bare heter "Court 1", "Court 2" osv.
+export async function renameCourts(tournamentId: string, names: string[]) {
+  // Fjern mellomrom før og etter, og kutt navn som er for lange.
+  const cleanedNames: string[] = [];
+  for (const name of names) {
+    const trimmed = name.trim();
+    cleanedNames.push(trimmed.slice(0, MAX_COURT_NAME_LENGTH));
+  }
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from("tournaments")
+    .update({ court_names: cleanedNames })
+    .eq("id", tournamentId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
   refreshPages(tournamentId);
 }
