@@ -6,6 +6,7 @@ import { LeaderboardTable } from "@/components/tournament/LeaderboardTable";
 export default function LeaderboardPage() {
   const { matches } = useTournament();
 
+  // Bare kamper med poeng teller.
   const completedMatches = matches.filter(
     (m) => m.score_a !== null && m.score_b !== null
   );

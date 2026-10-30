@@ -12,6 +12,7 @@ interface EditPairingModalProps {
   onClose: () => void;
 }
 
+// En nedtrekksliste for å velge én spiller.
 function PlayerSelect({
   value,
   onChange,
@@ -41,6 +42,7 @@ function PlayerSelect({
   );
 }
 
+// Vinduet der man bytter hvem som spiller på hvilket lag i en kamp.
 export function EditPairingModal({
   match,
   allMatchesInRound,
@@ -48,8 +50,10 @@ export function EditPairingModal({
   tournamentId,
   onClose,
 }: EditPairingModalProps) {
+  // Alle spillere, sortert alfabetisk.
   const roundPlayers = [...players].sort((a, b) => a.name.localeCompare(b.name));
 
+  // a1 og a2 er lag A, b1 og b2 er lag B. Vi starter med spillerne som er i kampen nå.
   const [a1, setA1] = useState(match.team_a[0]);
   const [a2, setA2] = useState(match.team_a[1]);
   const [b1, setB1] = useState(match.team_b[0]);
@@ -57,9 +61,12 @@ export function EditPairingModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Samme spiller kan ikke stå to steder. Et Set fjerner duplikater,
+  // så hvis det blir mindre enn listen, finnes det en duplikat.
   const selected = [a1, a2, b1, b2];
   const hasDuplicates = new Set(selected).size !== selected.length;
 
+  // Lagre de nye lagene i databasen og lukk vinduet.
   async function handleSave() {
     if (hasDuplicates) {
       setError("Each player can only appear once");

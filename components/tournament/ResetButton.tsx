@@ -4,10 +4,13 @@ import { useState } from "react";
 import { resetTournament } from "@/lib/actions/tournament";
 
 export function ResetButton({ tournamentId }: { tournamentId: string }) {
+  // confirming: har brukeren trykket Reset og skal nå bekrefte?
+  // loading: venter vi på serveren akkurat nå?
   const [confirming, setConfirming] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Sletter alle runder og lager en ny runde 1. Laster siden på nytt når det er ferdig.
   async function handleReset() {
     setLoading(true);
     setError(null);
@@ -22,6 +25,7 @@ export function ResetButton({ tournamentId }: { tournamentId: string }) {
     }
   }
 
+  // Etter at brukeren har trykket Reset: vis 'Sure?' med Yes og Cancel.
   if (confirming) {
     return (
       <div className="flex items-center gap-2">
@@ -44,6 +48,7 @@ export function ResetButton({ tournamentId }: { tournamentId: string }) {
     );
   }
 
+  // Vanlig visning: bare Reset-knappen.
   return (
     <div className="flex items-center gap-2">
       {error && <span className="text-xs text-red-400">{error}</span>}
